@@ -64,7 +64,7 @@ const Register = () => {
   };
   return (
     <div>
-      <div className="bg-gray-50">
+      <div className="bg-sky-700">
         <Navbar></Navbar>
       </div>
       <div className="lg:flex justify-center items-center my-20">

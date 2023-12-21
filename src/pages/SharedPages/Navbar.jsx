@@ -18,7 +18,7 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "text-red-700" : ""
+            isPending ? "pending" : isActive ? "text-sky-400" : ""
           }
         >
           Home
@@ -28,7 +28,7 @@ const Navbar = () => {
         <NavLink
           to="/dashboard"
           className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "text-red-700" : ""
+            isPending ? "pending" : isActive ? "text-sky-400" : ""
           }
         >
           Dashboard
@@ -38,7 +38,7 @@ const Navbar = () => {
         <NavLink
           to="/about"
           className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "text-red-700" : ""
+            isPending ? "pending" : isActive ? "text-sky-400" : ""
           }
         >
           About
@@ -48,7 +48,7 @@ const Navbar = () => {
         <NavLink
           to="/contact"
           className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "text-red-700" : ""
+            isPending ? "pending" : isActive ? "text-sky-400" : ""
           }
         >
           Contact
@@ -63,7 +63,7 @@ const Navbar = () => {
           <NavLink
             to="/login"
             className={({ isActive, isPending }) =>
-              isPending ? "pending" : isActive ? "text-red-700" : ""
+              isPending ? "pending" : isActive ? "text-sky-400" : ""
             }
           >
             Login
@@ -81,7 +81,7 @@ const Navbar = () => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              className="inline-block w-5 h-5 stroke-current"
+              className="inline-block w-5 h-5 stroke-current text-gray-200"
             >
               <path
                 strokeLinecap="round"
@@ -98,12 +98,12 @@ const Navbar = () => {
             {navLinks}
           </ul>
         </div>
-        <Link to="/" className="text-2xl font-bold lg:ml-20">
+        <Link to="/" className="text-2xl text-gray-200 font-bold lg:ml-20">
           TaskPulse
         </Link>
       </div>
       <div className="navbar-end flex justify-end items-center gap-5 lg:mr-20">
-        <ul className="hidden lg:flex justify-center items-center gap-5 text-lg font-semibold">
+        <ul className="hidden lg:flex justify-center items-center gap-5 text-gray-200 text-lg font-semibold">
           {navLinks}
         </ul>
         <div className="dropdown dropdown-end">

@@ -3,7 +3,7 @@ import Navbar from "../SharedPages/Navbar";
 const Dashboard = () => {
   return (
     <div>
-      <div className="bg-gray-50">
+      <div className="bg-sky-700">
         <Navbar></Navbar>
       </div>
     </div>
