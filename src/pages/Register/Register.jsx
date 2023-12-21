@@ -8,7 +8,7 @@ import { updateProfile } from "firebase/auth";
 import Footer from "../SharedPages/Footer";
 
 const Register = () => {
-  const { createUser } = useContext(AuthContext);
+  const { createUser, loginInWithGoogle } = useContext(AuthContext);
   const [registerError, setRegisterError] = useState("");
   const navigate = useNavigate();
 
@@ -57,6 +57,23 @@ const Register = () => {
             .catch((error) => {
               setRegisterError(error.message);
             });
+        }
+      })
+      .catch((error) => {
+        setRegisterError(error.message);
+      });
+  };
+
+  const handleRegisterWithGoogle = () => {
+    loginInWithGoogle()
+      .then((result) => {
+        if (result.user) {
+          Swal.fire({
+            title: "Good job!",
+            text: "You have registered successfully!",
+            icon: "success",
+          });
+          navigate("/");
         }
       })
       .catch((error) => {
@@ -142,7 +159,10 @@ const Register = () => {
           </p>
           <div className="w-max border mx-auto bg-white rounded-full hover:bg-slate-100">
             <Link>
-              <button className="flex items-center justify-center gap-3 font-semibold py-2 px-5">
+              <button
+                onClick={handleRegisterWithGoogle}
+                className="flex items-center justify-center gap-3 font-semibold py-2 px-5"
+              >
                 <img
                   className="w-5"
                   src="https://i.ibb.co/Pj0MgcP/google.png"

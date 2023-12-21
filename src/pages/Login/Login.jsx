@@ -7,8 +7,8 @@ import Swal from "sweetalert2";
 import Footer from "../SharedPages/Footer";
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
-  const [loginError, setLoginError] = useState('');
+  const { login, loginInWithGoogle } = useContext(AuthContext);
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,21 +20,37 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    setLoginError('');
+    setLoginError("");
 
     login(email, password)
-      .then(result => {
+      .then((result) => {
         console.log(result.user);
         Swal.fire({
-            title: "Good job!",
-            text: "You have logged in successfully!",
-            icon: "success"
-          });
-        navigate(from, {replace: true});
+          title: "Good job!",
+          text: "You have logged in successfully!",
+          icon: "success",
+        });
+        navigate(from, { replace: true });
       })
-      .catch(error => {
+      .catch((error) => {
         setLoginError(error.message);
+      });
+  };
+
+  const handleGoogleLogin = () => {
+    loginInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        Swal.fire({
+          title: "Good job!",
+          text: "You have successfully logged in..!",
+          icon: "success",
+        });
+        navigate(from, { replace: true });
       })
+      .catch((error) => {
+        setLoginError(error.message);
+      });
   };
   return (
     <div>
@@ -77,10 +93,10 @@ const Login = () => {
             </div>
           </form>
           {loginError && (
-          <p className="text-red-600 font-semibold text-center">
-            {loginError}
-          </p>
-        )}
+            <p className="text-red-600 font-semibold text-center">
+              {loginError}
+            </p>
+          )}
           <p className="w-2/3 mx-auto font-medium mt-3 text-gray-700 dark:text-gray-400">
             Don’t have an account yet?{" "}
             <Link
@@ -90,10 +106,15 @@ const Login = () => {
               Register
             </Link>
           </p>
-          <p className="text-lg font-semibold text-center my-4">------- or -------</p>
+          <p className="text-lg font-semibold text-center my-4">
+            ------- or -------
+          </p>
           <div className="w-max border mx-auto bg-white rounded-full hover:bg-slate-100">
             <Link>
-              <button className="flex items-center justify-center gap-3 font-semibold py-2 px-5">
+              <button
+                onClick={handleGoogleLogin}
+                className="flex items-center justify-center gap-3 font-semibold py-2 px-5"
+              >
                 <img
                   className="w-5"
                   src="https://i.ibb.co/Pj0MgcP/google.png"
