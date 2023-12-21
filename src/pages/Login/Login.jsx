@@ -1,8 +1,40 @@
 import Navbar from "../SharedPages/Navbar";
 import login_image from "../../assets/images/login/login.jpg";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
 
 const Login = () => {
+  const { login } = useContext(AuthContext);
+  const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    setLoginError('');
+
+    login(email, password)
+      .then(result => {
+        console.log(result.user);
+        Swal.fire({
+            title: "Good job!",
+            text: "You have logged in successfully!",
+            icon: "success"
+          });
+        navigate(from, {replace: true});
+      })
+      .catch(error => {
+        setLoginError(error.message);
+      })
+  };
   return (
     <div>
       <div className="bg-gray-50">
@@ -13,7 +45,7 @@ const Login = () => {
           <img src={login_image} alt="" />
         </div>
         <div className="lg:w-4/5 xl:w-2/6">
-          <form className="">
+          <form onSubmit={handleLogin} className="">
             <h2 className="text-2xl font-bold text-center">
               Login to your account
             </h2>
@@ -43,6 +75,11 @@ const Login = () => {
               </button>
             </div>
           </form>
+          {loginError && (
+          <p className="text-red-600 font-semibold text-center">
+            {loginError}
+          </p>
+        )}
           <p className="w-2/3 mx-auto font-medium mt-3 text-gray-700 dark:text-gray-400">
             Don’t have an account yet?{" "}
             <Link

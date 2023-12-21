@@ -1,8 +1,67 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../SharedPages/Navbar";
 import login_image from "../../assets/images/login/login.jpg";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
+import Swal from "sweetalert2";
+import { updateProfile } from "firebase/auth";
 
 const Register = () => {
+  const { createUser } = useContext(AuthContext);
+  const [registerError, setRegisterError] = useState("");
+  const navigate = useNavigate();
+
+  const handleRegister = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const photo = form.photo.value;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    setRegisterError("");
+
+    if (password.length < 6) {
+      setRegisterError("Password should be in 6 character!");
+      return;
+    } else if (!/[A-Z]/.test(password)) {
+      setRegisterError(
+        "Your password should have at least one upper case character!"
+      );
+      return;
+    } else if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\-]/.test(password)) {
+      setRegisterError(
+        "Your password should have at least one special character!"
+      );
+      return;
+    }
+
+    createUser(email, password)
+      .then((result) => {
+        if (result.user) {
+          Swal.fire({
+            title: "Good job!",
+            text: "You have registered successfully!",
+            icon: "success",
+          });
+          form.reset();
+          navigate("/");
+          updateProfile(result.user, {
+            displayName: name,
+            photoURL: photo,
+          })
+            .then((result) => {
+              console.log(result.user);
+            })
+            .catch((error) => {
+              setRegisterError(error.message);
+            });
+        }
+      })
+      .catch((error) => {
+        setRegisterError(error.message);
+      });
+  };
   return (
     <div>
       <div className="bg-gray-50">
@@ -13,7 +72,7 @@ const Register = () => {
           <img src={login_image} alt="" />
         </div>
         <div className="lg:w-4/5 xl:w-2/6">
-          <form className="">
+          <form onSubmit={handleRegister} className="">
             <h2 className="text-2xl font-bold text-center">
               Register to your account
             </h2>
@@ -63,6 +122,11 @@ const Register = () => {
               </button>
             </div>
           </form>
+          {registerError && (
+            <p className="text-red-600 font-semibold text-center">
+              {registerError}
+            </p>
+          )}
           <p className="w-2/3 mx-auto font-medium mt-3 text-gray-700 dark:text-gray-400">
             Don’t have an account yet?{" "}
             <Link

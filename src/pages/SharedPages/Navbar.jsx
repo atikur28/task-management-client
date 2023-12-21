@@ -1,6 +1,17 @@
+import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const navLinks = (
     <>
       <li>
@@ -11,6 +22,16 @@ const Navbar = () => {
           }
         >
           Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? "text-red-700" : ""
+          }
+        >
+          Dashboard
         </NavLink>
       </li>
       <li>
@@ -34,14 +55,20 @@ const Navbar = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/login"
-          className={({ isActive, isPending }) =>
-            isPending ? "pending" : isActive ? "text-red-700" : ""
-          }
-        >
-          Login
-        </NavLink>
+        {user ? (
+          <p onClick={handleLogOut} className="cursor-pointer">
+            Logout
+          </p>
+        ) : (
+          <NavLink
+            to="/login"
+            className={({ isActive, isPending }) =>
+              isPending ? "pending" : isActive ? "text-red-700" : ""
+            }
+          >
+            Login
+          </NavLink>
+        )}
       </li>
     </>
   );
@@ -86,18 +113,19 @@ const Navbar = () => {
             className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://i.ibb.co/whSBfc4/user.png"
-              />
+              {user ? (
+                <img src={user?.photoURL} />
+              ) : (
+                <img src="https://i.ibb.co/whSBfc4/user.png" />
+              )}
             </div>
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 font-medium shadow bg-base-100 rounded-box w-52"
           >
-            <li>Profile</li>
-            <li>Settings</li>
+            <li>{user?.displayName}</li>
+            <li><Link>Settings</Link></li>
           </ul>
         </div>
       </div>
