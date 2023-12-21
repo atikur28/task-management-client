@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import Swal from "sweetalert2";
 import { updateProfile } from "firebase/auth";
+import Footer from "../SharedPages/Footer";
 
 const Register = () => {
   const { createUser } = useContext(AuthContext);
@@ -153,6 +154,7 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <Footer></Footer>
     </div>
   );
 };
