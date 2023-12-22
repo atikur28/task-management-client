@@ -6,6 +6,7 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import ToDo from "./ToDo/ToDo";
 import Ongoing from "./Ongoing/Ongoing";
+import Completed from "./Completed/Completed";
 
 const Dashboard = () => {
   const {user} = useContext(AuthContext);
@@ -256,6 +257,7 @@ const Dashboard = () => {
               </div>
             </dialog>
           </div>
+          <Completed></Completed>
         </div>
       </div>
       <Footer></Footer>
