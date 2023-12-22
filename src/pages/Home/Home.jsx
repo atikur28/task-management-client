@@ -2,6 +2,7 @@ import Navbar from "../SharedPages/Navbar";
 import home_banner from "../../assets/images/home/home-banner.jpg";
 import HomeBanner from "./HomeBanner/HomeBanner";
 import Footer from "../SharedPages/Footer";
+import Benefits from "./Benefits/Benefits";
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
         <Navbar></Navbar>
         <HomeBanner></HomeBanner>
       </div>
+      <Benefits></Benefits>
       <Footer></Footer>
     </div>
   );
