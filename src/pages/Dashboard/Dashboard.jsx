@@ -28,13 +28,12 @@ const Dashboard = () => {
       priority: priority,
       status: status
     }
-    console.log(taskInfo);
     axiosPublic.post("/tasks", taskInfo).then(res => {
       if(res.data.insertedId) {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your tas has been added",
+          title: "Your task has been added",
           showConfirmButton: false,
           timer: 1500
         });

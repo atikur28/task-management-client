@@ -2,12 +2,16 @@ import { useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
+import CountdownTimer from "../CountDownTimer/CountDownTimer";
 
 const ToDo = () => {
   const { user } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
 
-  const { data: tasks = [] } = useQuery({
+  const today = new Date().getTime();
+
+  const { data: tasks = [], refetch } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
       const res = await axiosPublic.get("/tasks");
@@ -16,6 +20,45 @@ const ToDo = () => {
   });
   const filteredUser = tasks?.filter((item) => item?.email === user?.email);
   const filteredToDo = filteredUser?.filter((data) => data?.status === "Do");
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosPublic.delete(`/tasks/${id}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Task has been deleted.",
+              icon: "success",
+            });
+            refetch();
+          }
+        });
+      }
+    });
+  };
+
+  const handleShift = (id) => {
+    const updatedStatus = { status: "Ongoing" };
+    axiosPublic.patch(`/tasks/${id}`, updatedStatus).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        Swal.fire({
+          title: "Good job!",
+          text: "You have shifted the task!",
+          icon: "success",
+        });
+        refetch();
+      }
+    });
+  };
 
   return (
     <div>
@@ -52,7 +95,26 @@ const ToDo = () => {
                 <li className="w-full bg-orange-500 py-1 text-center rounded text-white font-semibold cursor-pointer mb-3">
                   Edit
                 </li>
-                <li className="w-full bg-red-500 py-1 text-center rounded text-white font-semibold cursor-pointer">
+                <li className="mb-3">
+                  <div className="flex justify-between items-center border rounded">
+                    <select name="status">
+                      <option value="Ongoing">Ongoing</option>
+                    </select>
+                    {
+                        new Date(item?.date).getTime() > today ? <button
+                      onClick={() => handleShift(item._id)}
+                      className="py-1 px-2 rounded text-white bg-green-600 hover:bg-green-600"
+                    >
+                      Shift
+                    </button> :
+                    <button disabled className="py-1 px-2 rounded text-white">Shift</button>
+                    }
+                  </div>
+                </li>
+                <li
+                  onClick={() => handleDelete(item?._id)}
+                  className="w-full bg-red-500 py-1 text-center rounded text-white font-semibold cursor-pointer"
+                >
                   Delete
                 </li>
               </ul>
@@ -60,6 +122,7 @@ const ToDo = () => {
           </div>
           <h3 className="text-lg font-semibold">{item?.title}</h3>
           <p className="text-sm text-zinc-600">{item?.description}</p>
+          <CountdownTimer date={item?.date}></CountdownTimer>
         </div>
       ))}
     </div>
