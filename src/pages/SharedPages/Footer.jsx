@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   return (
     <footer className="footer bg-gray-200 p-10">
@@ -28,8 +30,9 @@ const Footer = () => {
       </nav>
       <nav>
         <header className="footer-title">Company</header>
-        <a className="link link-hover">About us</a>
-        <a className="link link-hover">Contact</a>
+        <Link to="/" className="link link-hover">Home</Link>
+        <Link to="/about" className="link link-hover">About us</Link>
+        <Link to="/contact" className="link link-hover">Contact</Link>
       </nav>
       <nav>
         <header className="footer-title">Legal</header>
