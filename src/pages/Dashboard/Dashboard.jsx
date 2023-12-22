@@ -5,6 +5,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import ToDo from "./ToDo/ToDo";
+import Ongoing from "./Ongoing/Ongoing";
 
 const Dashboard = () => {
   const {user} = useContext(AuthContext);
@@ -186,6 +187,7 @@ const Dashboard = () => {
               </div>
             </dialog>
           </div>
+          <Ongoing></Ongoing>
         </div>
         {/* 3 */}
         <div className="w-[90%] md:w-[60%] lg:w-[30%] px-3 py-3 border rounded-lg my-5">
